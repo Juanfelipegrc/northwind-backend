@@ -232,7 +232,6 @@ namespace NorthwindBackend.Bussines.Services
             var result = (int)returnParameter.Value;
 
             return result > 0;
-
         }
     }
 }
