@@ -63,105 +63,35 @@ namespace NorthwindBackend.Bussines.Services
 
         public async Task<bool> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request)
         {
-            var parameters = new List<SqlParameter>
-            {
-                new SqlParameter("@EmployeeId", id),
-                new SqlParameter("@UserRequestId", request.UserRequestId)
-            };
-
-            var sql = "EXEC UpdateEmployeeById @EmployeeId, @UserRequestId";
-
-            if (request.LastName != null)
-            {
-                parameters.Add(new SqlParameter("@LastName", request.LastName));
-                sql += ", @LastName";
-            }
-            if (request.FirstName != null)
-            {
-                parameters.Add(new SqlParameter("@FirstName", request.FirstName));
-                sql += ", @FirstName";
-            }
-            if (request.Title != null)
-            {
-                parameters.Add(new SqlParameter("@Title", request.Title));
-                sql += ", @Title";
-            }
-            if (request.TitleOfCourtesy != null)
-            {
-                parameters.Add(new SqlParameter("@TitleOfCourtesy", request.TitleOfCourtesy));
-                sql += ", @TitleOfCourtesy";
-            }
-            if (request.BirthDate.HasValue)
-            {
-                parameters.Add(new SqlParameter("@BirthDate", request.BirthDate));
-                sql += ", @BirthDate";
-            }
-            if (request.HireDate.HasValue)
-            {
-                parameters.Add(new SqlParameter("@HireDate", request.HireDate));
-                sql += ", @HireDate";
-            }
-            if (request.Address != null)
-            {
-                parameters.Add(new SqlParameter("@Address", request.Address));
-                sql += ", @Address";
-            }
-            if (request.City != null)
-            {
-                parameters.Add(new SqlParameter("@City", request.City));
-                sql += ", @City";
-            }
-            if (request.Region != null)
-            {
-                parameters.Add(new SqlParameter("@Region", request.Region));
-                sql += ", @Region";
-            }
-            if (request.PostalCode != null)
-            {
-                parameters.Add(new SqlParameter("@PostalCode", request.PostalCode));
-                sql += ", @PostalCode";
-            }
-            if (request.Country != null)
-            {
-                parameters.Add(new SqlParameter("@Country", request.Country));
-                sql += ", @Country";
-            }
-            if (request.HomePhone != null)
-            {
-                parameters.Add(new SqlParameter("@HomePhone", request.HomePhone));
-                sql += ", @HomePhone";
-            }
-            if (request.Extension != null)
-            {
-                parameters.Add(new SqlParameter("@Extension", request.Extension));
-                sql += ", @Extension";
-            }
-            if (request.Photo != null)
-            {
-                var photoParam = new SqlParameter("@Photo", System.Data.SqlDbType.Image)
+            var result = await _context.Database.ExecuteSqlRawAsync(
+                "EXEC UpdateEmployeeById @EmployeeId, @UserRequestId, @LastName, @FirstName, @Title, @TitleOfCourtesy, @BirthDate, @HireDate, @Address, @City, @Region, @PostalCode, @Country, @HomePhone, @Extension, @Photo, @Notes, @ReportsTo, @PhotoPath",
+                new[]
                 {
-                    Value = request.Photo
-                };
-                parameters.Add(photoParam);
-                sql += ", @Photo";
-            }
-            if (request.Notes != null)
-            {
-                parameters.Add(new SqlParameter("@Notes", request.Notes));
-                sql += ", @Notes";
-            }
-            if (request.ReportsTo.HasValue)
-            {
-                parameters.Add(new SqlParameter("@ReportsTo", request.ReportsTo));
-                sql += ", @ReportsTo";
-            }
-            if (request.PhotoPath != null)
-            {
-                parameters.Add(new SqlParameter("@PhotoPath", request.PhotoPath));
-                sql += ", @PhotoPath";
-            }
+                    new SqlParameter("@EmployeeId", id),
+                    new SqlParameter("@UserRequestId", request.UserRequestId),
+                    new SqlParameter("@LastName", (object?)request.LastName ?? DBNull.Value),
+                    new SqlParameter("@FirstName", (object?)request.FirstName ?? DBNull.Value),
+                    new SqlParameter("@Title", (object?)request.Title ?? DBNull.Value),
+                    new SqlParameter("@TitleOfCourtesy", (object?)request.TitleOfCourtesy ?? DBNull.Value),
+                    new SqlParameter("@BirthDate", (object?)request.BirthDate ?? DBNull.Value),
+                    new SqlParameter("@HireDate", (object?)request.HireDate ?? DBNull.Value),
+                    new SqlParameter("@Address", (object?)request.Address ?? DBNull.Value),
+                    new SqlParameter("@City", (object?)request.City ?? DBNull.Value),
+                    new SqlParameter("@Region", (object?)request.Region ?? DBNull.Value),
+                    new SqlParameter("@PostalCode", (object?)request.PostalCode ?? DBNull.Value),
+                    new SqlParameter("@Country", (object?)request.Country ?? DBNull.Value),
+                    new SqlParameter("@HomePhone", (object?)request.HomePhone ?? DBNull.Value),
+                    new SqlParameter("@Extension", (object?)request.Extension ?? DBNull.Value),
+                    new SqlParameter("@Photo", System.Data.SqlDbType.Image)
+                    {
+                        Value = (object?)request.Photo ?? DBNull.Value
+                    },
+                    new SqlParameter("@Notes", (object?)request.Notes ?? DBNull.Value),
+                    new SqlParameter("@ReportsTo", (object?)request.ReportsTo ?? DBNull.Value),
+                    new SqlParameter("@PhotoPath", (object?)request.PhotoPath ?? DBNull.Value)
+                }
+            );
 
-            var result = await _context.Database.ExecuteSqlRawAsync(sql, parameters.ToArray());
             return result > 0;
 
         }
