@@ -44,7 +44,7 @@ namespace NorthwindBackend.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error creating Employee, User don't have authorization" });
+                    return BadRequest(new { message = "Error creating Employee, User don't have authorization to request or not exists" });
                 }
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace NorthwindBackend.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error updating Employee, User don't have authorization" });
+                    return BadRequest(new { message = "Error updating Employee, User don't have authorization to request or not exists" });
                 }
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace NorthwindBackend.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error deleting Employee, User don't have authorization" });
+                    return BadRequest(new { message = "Error deleting Employee, User don't have authorization to request or not exists" });
                 }
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace NorthwindBackend.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error disabling Employee, User don't have authorization" });
+                    return BadRequest(new { message = "Error disabling Employee, User don't have authorization to request or not exists" });
                 }
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ namespace NorthwindBackend.API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error enabling Employee, User don't have authorization" });
+                    return BadRequest(new { message = "Error enabling Employee, User don't have authorization to request or not exists" });
                 }
             }
             catch (Exception ex)
