@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindBackend.Data.DTO_s
+namespace NorthwindBackend.Bussines.DTOs
 {
     public class UpdateEmployeeRequestDTO
     {

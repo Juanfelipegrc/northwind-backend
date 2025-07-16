@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NorthwindBackend.Bussines.Interfaces;
-using NorthwindBackend.Data.DTO_s;
+using NorthwindBackend.Data.ResultViews;
+using NorthwindBackend.Bussines.DTOs;
 
 namespace NorthwindBackend.API.Controllers
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NorthwindBackend.Data.DTO_s;
+using NorthwindBackend.Data.ResultViews;
 using NorthwindBackend.Data.Entities;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using NorthwindBackend.Bussines.Interfaces;
 using NorthwindBackend.Data.Context;
-using NorthwindBackend.Data.DTO_s;
+using NorthwindBackend.Data.ResultViews;
+using NorthwindBackend.Bussines.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
