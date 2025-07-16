@@ -11,11 +11,11 @@ namespace NorthwindBackend.Bussines.Interfaces
     public interface IEmployeeService
     {
         Task<List<EmployeesSalesDTO>> GetTop3EmployeesBySalesAmount();
-        Task<bool> CreateEmployeeAsync(CreateEmployeeRequestDTO request);
-        Task<bool> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request);
-        Task<bool> DeleteEmployeeById(int id, int userRequestId);
-        Task<bool> DisableEmployeeById(int id, int userRequestId);
-        Task<bool> EnableEmployeeById(int id, int userRequestId);
-        Task<bool> ValidateDisabledEmployee(int id);
+        Task<SPStatusResultDTO> CreateEmployeeAsync(CreateEmployeeRequestDTO request);
+        Task<SPStatusResultDTO> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request);
+        Task<SPStatusResultDTO> DeleteEmployeeById(int id, int userRequestId);
+        Task<SPStatusResultDTO> DisableEmployeeById(int id, int userRequestId);
+        Task<SPStatusResultDTO> EnableEmployeeById(int id, int userRequestId);
+        Task<SPValidateDisabledUserResultDTO> ValidateDisabledEmployee(int id);
     }
 }

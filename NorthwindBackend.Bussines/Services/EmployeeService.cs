@@ -28,9 +28,9 @@ namespace NorthwindBackend.Bussines.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> CreateEmployeeAsync(CreateEmployeeRequestDTO request)
+        public async Task<SPStatusResultDTO> CreateEmployeeAsync(CreateEmployeeRequestDTO request)
         {
-            var result = await _context.Database.ExecuteSqlRawAsync(
+            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC CreateNewEmployee @LastName, @FirstName, @Title, @TitleOfCourtesy, @BirthDate, @HireDate, @Address, @City, @Region, @PostalCode, @Country, @HomePhone, @Extension, @Photo, @Notes, @ReportsTo, @PhotoPath, @UserRequestId",
                     new[]
                     {
@@ -56,15 +56,15 @@ namespace NorthwindBackend.Bussines.Services
                         new SqlParameter("@PhotoPath", request.PhotoPath ?? (object)DBNull.Value),
                         new SqlParameter("@UserRequestId", request.UserRequestId)
                     }
-                );
+                ).FirstOrDefaultAsync();
 
-            return result > 0;
+            return result;
             
         }
 
-        public async Task<bool> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request)
+        public async Task<SPStatusResultDTO> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request)
         {
-            var result = await _context.Database.ExecuteSqlRawAsync(
+            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC UpdateEmployeeById @EmployeeId, @UserRequestId, @LastName, @FirstName, @Title, @TitleOfCourtesy, @BirthDate, @HireDate, @Address, @City, @Region, @PostalCode, @Country, @HomePhone, @Extension, @Photo, @Notes, @ReportsTo, @PhotoPath",
                 new[]
                 {
@@ -91,78 +91,66 @@ namespace NorthwindBackend.Bussines.Services
                     new SqlParameter("@ReportsTo", (object?)request.ReportsTo ?? DBNull.Value),
                     new SqlParameter("@PhotoPath", (object?)request.PhotoPath ?? DBNull.Value)
                 }
-            );
+            ).FirstOrDefaultAsync();
 
-            return result > 0;
+            return result;
 
         }
 
 
-        public async Task<bool> DeleteEmployeeById(int id, int userRequestId)
+        public async Task<SPStatusResultDTO> DeleteEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.Database.ExecuteSqlRawAsync(
+            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC DeleteEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            );
+            ).FirstOrDefaultAsync();
 
-            return result > 0;
+            return result;
         }
 
-        public async Task<bool> DisableEmployeeById(int id, int userRequestId)
+        public async Task<SPStatusResultDTO> DisableEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.Database.ExecuteSqlRawAsync(
+            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC DisableEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            );
+            ).FirstOrDefaultAsync();
 
-            return result > 0;
+            return result;
         }
 
-        public async Task<bool> EnableEmployeeById(int id, int userRequestId)
+        public async Task<SPStatusResultDTO> EnableEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.Database.ExecuteSqlRawAsync(
+            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC EnableEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            );
+            ).FirstOrDefaultAsync();
 
-            return result > 0;
+            return result;
         }
 
-        public async Task<bool> ValidateDisabledEmployee(int id)
+        public async Task<SPValidateDisabledUserResultDTO> ValidateDisabledEmployee(int id)
         {
-            await using var connection = _context.Database.GetDbConnection();
-            await connection.OpenAsync();
+            var result = await _context.SPValidateDisabledUserResultDTOs.FromSqlRaw(
+                "EXEC ValidateDisabledEmployee @EmployeeId",
+                new[]
+                {
+                    new SqlParameter("@EmployeeId", id)
+                } 
+            ).FirstOrDefaultAsync();
 
-            using var command = connection.CreateCommand();
-            var sql = "ValidateDisabledEmployee";
-            command.CommandText = sql;
-            command.CommandType = System.Data.CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@EmployeeId", id));
-            var returnParameter = new SqlParameter("@ReturnVal", System.Data.SqlDbType.Int)
-            {
-                Direction = System.Data.ParameterDirection.ReturnValue
-            };
-
-            command.Parameters.Add(returnParameter);
-
-            await command.ExecuteNonQueryAsync();
-
-            var result = (int)returnParameter.Value;
-
-            return result > 0;
+            return result;
         }
     }
 }
