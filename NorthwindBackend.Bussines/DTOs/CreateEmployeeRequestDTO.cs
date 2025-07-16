@@ -24,7 +24,7 @@ namespace NorthwindBackend.Bussines.DTOs
         public byte[]? Photo { get; set; } = null;
         public string Notes { get; set; } = "";
         public int? ReportsTo { get; set; }
-        public string PhotoPath { get; set; } = "";
+        public string? PhotoPath { get; set; } = null;
         public int UserRequestId { get; set; }
     }
 }

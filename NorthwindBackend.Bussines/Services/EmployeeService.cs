@@ -30,7 +30,7 @@ namespace NorthwindBackend.Bussines.Services
 
         public async Task<SPStatusResultDTO> CreateEmployeeAsync(CreateEmployeeRequestDTO request)
         {
-            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
+            var result = (await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC CreateNewEmployee @LastName, @FirstName, @Title, @TitleOfCourtesy, @BirthDate, @HireDate, @Address, @City, @Region, @PostalCode, @Country, @HomePhone, @Extension, @Photo, @Notes, @ReportsTo, @PhotoPath, @UserRequestId",
                     new[]
                     {
@@ -56,7 +56,7 @@ namespace NorthwindBackend.Bussines.Services
                         new SqlParameter("@PhotoPath", request.PhotoPath ?? (object)DBNull.Value),
                         new SqlParameter("@UserRequestId", request.UserRequestId)
                     }
-                ).FirstOrDefaultAsync();
+                ).ToListAsync()).FirstOrDefault();
 
             return result;
             
@@ -64,7 +64,7 @@ namespace NorthwindBackend.Bussines.Services
 
         public async Task<SPStatusResultDTO> UpdateEmployeeAsync(int id, UpdateEmployeeRequestDTO request)
         {
-            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
+            var result = (await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC UpdateEmployeeById @EmployeeId, @UserRequestId, @LastName, @FirstName, @Title, @TitleOfCourtesy, @BirthDate, @HireDate, @Address, @City, @Region, @PostalCode, @Country, @HomePhone, @Extension, @Photo, @Notes, @ReportsTo, @PhotoPath",
                 new[]
                 {
@@ -91,7 +91,7 @@ namespace NorthwindBackend.Bussines.Services
                     new SqlParameter("@ReportsTo", (object?)request.ReportsTo ?? DBNull.Value),
                     new SqlParameter("@PhotoPath", (object?)request.PhotoPath ?? DBNull.Value)
                 }
-            ).FirstOrDefaultAsync();
+            ).ToListAsync()).FirstOrDefault();
 
             return result;
 
@@ -100,55 +100,60 @@ namespace NorthwindBackend.Bussines.Services
 
         public async Task<SPStatusResultDTO> DeleteEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
+            var result = (await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC DeleteEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            ).FirstOrDefaultAsync();
+            ).ToListAsync()).FirstOrDefault();
 
             return result;
         }
 
         public async Task<SPStatusResultDTO> DisableEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
+
+
+
+            var result = (await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC DisableEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            ).FirstOrDefaultAsync();
+            ).ToListAsync()).FirstOrDefault();
+
+
 
             return result;
         }
 
         public async Task<SPStatusResultDTO> EnableEmployeeById(int id, int userRequestId)
         {
-            var result = await _context.SPStatusResultDTOs.FromSqlRaw(
+            var result = (await _context.SPStatusResultDTOs.FromSqlRaw(
                 "EXEC EnableEmployeeById @EmployeeId, @UserRequestId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id),
                     new SqlParameter("@UserRequestId", userRequestId)
                 }
-            ).FirstOrDefaultAsync();
+            ).ToListAsync()).FirstOrDefault();
 
             return result;
         }
 
         public async Task<SPValidateDisabledUserResultDTO> ValidateDisabledEmployee(int id)
         {
-            var result = await _context.SPValidateDisabledUserResultDTOs.FromSqlRaw(
+            var result = (await _context.SPValidateDisabledUserResultDTOs.FromSqlRaw(
                 "EXEC ValidateDisabledEmployee @EmployeeId",
                 new[]
                 {
                     new SqlParameter("@EmployeeId", id)
                 } 
-            ).FirstOrDefaultAsync();
+            ).ToListAsync()).FirstOrDefault();
 
             return result;
         }

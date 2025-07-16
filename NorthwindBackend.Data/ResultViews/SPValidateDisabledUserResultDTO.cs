@@ -9,7 +9,7 @@ namespace NorthwindBackend.Data.ResultViews
     public class SPValidateDisabledUserResultDTO
     {
         public bool Success { get; set; }
-        public bool IsDisabled { get; set; }
+        public bool? IsDisabled { get; set; } = null;
         public string Message { get; set; }
     }
 }
