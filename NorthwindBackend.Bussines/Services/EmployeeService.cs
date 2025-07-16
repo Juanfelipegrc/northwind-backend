@@ -58,6 +58,11 @@ namespace NorthwindBackend.Bussines.Services
                     }
                 ).ToListAsync()).FirstOrDefault();
 
+            if(result == null)
+            {
+                return new SPStatusResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
+
             return result;
             
         }
@@ -93,6 +98,10 @@ namespace NorthwindBackend.Bussines.Services
                 }
             ).ToListAsync()).FirstOrDefault();
 
+            if (result == null)
+            {
+                return new SPStatusResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
             return result;
 
         }
@@ -109,6 +118,10 @@ namespace NorthwindBackend.Bussines.Services
                 }
             ).ToListAsync()).FirstOrDefault();
 
+            if (result == null)
+            {
+                return new SPStatusResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
             return result;
         }
 
@@ -126,8 +139,10 @@ namespace NorthwindBackend.Bussines.Services
                 }
             ).ToListAsync()).FirstOrDefault();
 
-
-
+            if (result == null)
+            {
+                return new SPStatusResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
             return result;
         }
 
@@ -142,6 +157,10 @@ namespace NorthwindBackend.Bussines.Services
                 }
             ).ToListAsync()).FirstOrDefault();
 
+            if (result == null)
+            {
+                return new SPStatusResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
             return result;
         }
 
@@ -155,6 +174,10 @@ namespace NorthwindBackend.Bussines.Services
                 } 
             ).ToListAsync()).FirstOrDefault();
 
+            if (result == null)
+            {
+                return new SPValidateDisabledUserResultDTO { Success = false, Message = "Operation did not return any result" };
+            }
             return result;
         }
     }
