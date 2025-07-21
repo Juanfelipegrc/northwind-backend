@@ -1,8 +1,9 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NorthwindBackend.Bussines.Interfaces;
-using NorthwindBackend.Data.DTO_s;
+using NorthwindBackend.Bussines.Interfaces.IServices;
+using NorthwindBackend.Bussines.DTOs.Request;
+using NorthwindBackend.Bussines.DTOs.Response;
 
 namespace NorthwindBackend.API.Controllers
 {
@@ -14,6 +15,21 @@ namespace NorthwindBackend.API.Controllers
         public EmployeeController(IEmployeeService employeeService) 
         {
             _employeeService = employeeService;
+        }
+
+        [HttpGet("get-employee-by-id/{employeeId}")]
+        public async Task<IActionResult> GetEmployeeById(int employeeId)
+        {
+            try
+            {
+                var employee = await _employeeService.GetEmployeeById(employeeId);
+
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("get-top3-employees-by-sales")]
@@ -38,13 +54,13 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.CreateEmployeeAsync(request);
 
-                if(result)
+                if(result.Success)
                 {
-                    return Ok(new { message = "Employee created successfully" });
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error creating Employee, User don't have authorization to request or not exists" });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)
@@ -60,13 +76,13 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.UpdateEmployeeAsync(employeeId, request);
 
-                if (result)
+                if (result.Success)
                 {
-                    return Ok(new { message = "Employee updated successfully" });
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error updating Employee, User don't have authorization to request or not exists" });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)
@@ -82,13 +98,13 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.DeleteEmployeeById(employeeId, userRequestId);
 
-                if (result)
+                if (result.Success)
                 {
-                    return Ok(new { message = "Employee deleted successfully" });
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error deleting Employee, User don't have authorization to request or not exists" });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)
@@ -103,13 +119,15 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.DisableEmployeeById(request.EmployeeId, request.UserRequestId);
 
-                if (result)
+                Console.WriteLine(result);
+
+                if (result.Success)
                 {
-                    return Ok(new { message = "Employee disabled successfully" });
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error disabling Employee, User don't have authorization to request or not exists" });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)
@@ -125,13 +143,13 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.EnableEmployeeById(request.EmployeeId, request.UserRequestId);
 
-                if (result)
+                if (result.Success)
                 {
-                    return Ok(new { message = "Employee enabled successfully" });
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest(new { message = "Error enabling Employee, User don't have authorization to request or not exists" });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)
@@ -147,21 +165,13 @@ namespace NorthwindBackend.API.Controllers
             {
                 var result = await _employeeService.ValidateDisabledEmployee(employeeId);
 
-                if (!result)
+                if (result.Success)
                 {
-                    return Ok(new 
-                    { 
-                        message = "Employee is not disabled",
-                        isDisabled = false
-                    });
+                    return Ok(result);
                 }
                 else
                 {
-                    return Ok(new
-                    {
-                        message = "Employee is disabled",
-                        isDisabled = true
-                    });
+                    return BadRequest(new { message = result.Message, success = result.Success });
                 }
             }
             catch (Exception ex)

@@ -1,7 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using NorthwindBackend.Bussines.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using NorthwindBackend.Bussines.Interfaces.IQueries;
+using NorthwindBackend.Bussines.Interfaces.IServices;
 using NorthwindBackend.Bussines.Services;
 using NorthwindBackend.Data.Context;
+using NorthwindBackend.Data.Queries;
+using NorthwindBackend.Data.Repositories;
+using NorthwindBackend.Domain.Interfaces.IRepositories;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +22,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+//Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+//Queries
+builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
+
 //Services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+//Mapping
+
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<NorthwindBackend.Bussines.Mapping.DTOsMappingProfile>();
+    cfg.AddProfile<NorthwindBackend.Data.Mapping.EntitiesMappingProfile>();
+});
+
+
 
 var app = builder.Build();
 
