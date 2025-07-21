@@ -1,9 +1,9 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NorthwindBackend.Bussines.Interfaces;
-using NorthwindBackend.Data.ResultViews;
-using NorthwindBackend.Bussines.DTOs;
+using NorthwindBackend.Bussines.Interfaces.IServices;
+using NorthwindBackend.Bussines.DTOs.Request;
+using NorthwindBackend.Bussines.DTOs.Response;
 
 namespace NorthwindBackend.API.Controllers
 {
@@ -15,6 +15,21 @@ namespace NorthwindBackend.API.Controllers
         public EmployeeController(IEmployeeService employeeService) 
         {
             _employeeService = employeeService;
+        }
+
+        [HttpGet("get-employee-by-id/{employeeId}")]
+        public async Task<IActionResult> GetEmployeeById(int employeeId)
+        {
+            try
+            {
+                var employee = await _employeeService.GetEmployeeById(employeeId);
+
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("get-top3-employees-by-sales")]
