@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NorthwindBackend.Bussines.DTOs.Request
 {
-    public interface CreateUserRequestDTO
+    public class CreateUserRequestDTO
     {
         public string LastName { get; set; }
 
